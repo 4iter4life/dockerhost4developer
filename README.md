@@ -17,6 +17,17 @@ All this services will be presented in this repository as a example configuratio
 * Write Access to a DNS entries of your domain. 
 * create /store directory on route for storing of all (make sense to use it as a mount to a dedicated disc to prevent the OS disc overflow) 
 
+## DNS Entries
+Prepare following DNS entries on your DNS Server (DNS Registrar)
+
+* A     server1.exmple.com      <your-server-ip-address>
+* CNAME portainer.example.com   server1.example.com
+* CNAME nextcloud.example.com   server1.example.com
+* CNAME vault.example.com       server1.example.com
+* CNAME gitlab.example.com      server1.example.com
+* CNAME registry.example.com    server1.example.com
+* CNAME kibana.example.com      server1.example.com
+
 # Installation
 I will use example.com in my example configurations. You need to adapt it to your FQDN (Full Qualified Domain Name).
 
@@ -37,7 +48,14 @@ cd .management
 docker-compose -f initial.yaml up -d
 ```
 
+Check the result under https://portainer.example.com
+
 ## nextcloud
+Create new stack in portainer based and use following docker compose configuration
+```bash
+# Dont forget to chande domain names and passwords
+nextcloud.yaml
+```
 
 ## bitwarden
 
