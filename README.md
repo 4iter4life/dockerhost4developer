@@ -121,7 +121,7 @@ For reason that nginx-proxy cannot handle multiple domains ('VIRTUAL_HOST') with
     image: marcnuri/port-forward
     environment:
       LOCAL_PORT: 5005
-      REMOTE_HOST: web
+      REMOTE_HOST: gitlab
       REMOTE_PORT: 5005
       VIRTUAL_HOST: registry.example.com
       VIRTUAL_PORT: 5005
