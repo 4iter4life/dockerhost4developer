@@ -1,0 +1,42 @@
+version: '2'
+services:
+  app:
+    image: nextcloud:20.0.10
+    hostname: nexcloud-app
+    environment:
+      POSTGRES_HOST: db
+      POSTGRES_DB: nextcloud
+      POSTGRES_USER: nextcloud
+      POSTGRES_PASSWORD: nextcloud
+      OVERWRITEPROTOCOL: https
+      VIRTUAL_HOST: nextcloud.example.com
+      LETSENCRYPT_HOST: nextcloud.example.com
+    stdin_open: true
+    volumes:
+    - /store/nextcloud/app/data:/var/www/html/data
+    - /store/nextcloud/app/html:/var/www/html
+    - /store/nextcloud/app/config:/var/www/html/config
+    - /store/nextcloud/app/custom_apps:/var/www/html/custom_apps
+    - /store/nextcloud/app/themes:/var/www/html/themes
+    - /etc/localtime:/etc/localtime:ro
+    tty: true
+    networks:
+    - server1
+    restart: unless-stopped
+  db:
+    image: postgres:alpine
+    environment:
+      POSTGRES_PASSWORD: nextcloud
+      POSTGRES_DB: nextcloud
+      POSTGRES_USER: nextcloud
+    stdin_open: true
+    volumes:
+    - /store/nextcloud/postgres:/var/lib/postgresql/data
+    tty: true
+    networks:
+    - server1
+    restart: unless-stopped
+
+networks:
+  server1:
+    external: true

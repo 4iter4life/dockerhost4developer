@@ -1,0 +1,76 @@
+version: '2'
+services:
+  gitlab-runner-dind-new:
+    privileged: true
+    image: gitlab/gitlab-runner:v14.3.2
+    stdin_open: true
+    volumes:
+    - /cache
+    - /var/run/docker.sock:/var/run/docker.sock
+    tty: true
+    restart: unless-stopped
+  gitlab-runner-docker:
+    privileged: true
+    image: gitlab/gitlab-runner:v14.3.2
+    stdin_open: true
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+    tty: true
+    restart: unless-stopped
+  gitlab:
+    image: gitlab/gitlab-ce:13.10.2-ce.0
+    hostname: fmgitlab.example.com
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |-
+        external_url 'https://gitlab.example.com'
+        registry_external_url 'https://registry.example.com'
+        gitlab_rails['gitlab_shell_ssh_port'] = 2222
+        nginx['listen_port'] = 80
+        nginx['listen_https'] = false
+        nginx['client_max_body_size'] = "700m"
+
+        registry_nginx['enable'] = true
+        registry_nginx['listen_port'] = 5005
+        registry_nginx['listen_https'] = false
+        registry_nginx['proxy_set_headers'] = {
+          "Host" => "$$http_host",
+          "X-Real-IP" => "$$remote_addr",
+          "X-Forwarded-For" => "$$proxy_add_x_forwarded_for",
+          "X-Forwarded-Proto" => "https",
+          "X-Forwarded-Ssl" => "on"
+        }
+        gitlab_rails['registry_enabled'] = true
+        registry['enable'] = true
+        registry['dir'] = "/var/opt/gitlab/registry"
+        registry['log_directory'] = "/var/log/gitlab/registry"
+        registry['log_level'] = "info"
+      VIRTUAL_HOST: gitlab.example.com
+      VIRTUAL_PORT: 80
+      LETSENCRYPT_HOST: gitlab.example.com
+    volumes:
+    - /store/gitlab/config:/etc/gitlab
+    - /store/gitlab/logs:/var/log/gitlab
+    - /store/gitlab/data:/var/opt/gitlab
+    - /store/gitlab/ssl/:/etc/gitlab/ssl/
+    - /store/gitlab/registry:/var/opt/gitlab/gitlab-rails/shared/registry
+    networks:
+    - server1
+    restart: unless-stopped
+  port-forward:
+    image: marcnuri/port-forward
+    environment:
+      LOCAL_PORT: 5005
+      REMOTE_HOST: gitlab
+      REMOTE_PORT: 5005
+      VIRTUAL_HOST: registry.example.com
+      VIRTUAL_PORT: 5005
+      LETSENCRYPT_HOST: registry.example.com
+    stdin_open: true
+    tty: true
+    networks:
+    - server1
+    restart: unless-stopped
+
+networks:
+  server1:
+    external: true

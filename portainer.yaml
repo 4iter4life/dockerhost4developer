@@ -1,0 +1,21 @@
+version: '2'
+services:
+  portainer:
+    image: portainer/portainer-ce:2.9.1
+    stdin_open: true
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+    - /store/portainer2:/data
+    environment:
+      DEFAULT_EMAIL: 'info@example.com'
+      VIRTUAL_HOST: portainer.example.com
+      VIRTUAL_PORT: 9000
+      LETSENCRYPT_HOST: portainer.example.com
+    tty: true
+    networks:
+    - server1
+    restart: unless-stopped
+
+networks:
+  server1:
+    external: true

@@ -1,0 +1,18 @@
+version: '2'
+services:
+  bitwarden:
+    image: vaultwarden/server:1.22.2
+    stdin_open: true
+    volumes:
+    - /store/bitwarden/data:/data
+    environment:
+      VIRTUAL_HOST: vault.example.com
+      LETSENCRYPT_HOST: vault.example.com
+    tty: true
+    networks:
+    - server1
+    restart: unless-stopped
+
+networks:
+  server1:
+    external: true

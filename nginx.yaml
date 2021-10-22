@@ -1,0 +1,39 @@
+version: '2'
+services:
+  nginx-proxy:
+    image: nginxproxy/nginx-proxy
+    stdin_open: true
+    volumes:
+    - /var/run/docker.sock:/tmp/docker.sock:ro
+    - /store/proxy/certs:/etc/nginx/certs
+    - /store/proxy/vhost.d:/etc/nginx/vhost.d
+    - /store/proxy/html:/usr/share/nginx/html
+    tty: true
+    ports:
+    - 80:80
+    - 443:443
+    networks:
+    - server1
+    labels:
+      - "com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy"
+    restart: unless-stopped
+
+  acme-companion:
+    image: nginxproxy/acme-companion
+    stdin_open: true
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock:ro
+    - /store/proxy/certs:/etc/nginx/certs
+    - /store/proxy/vhost.d:/etc/nginx/vhost.d
+    - /store/proxy/html:/usr/share/nginx/html
+    - /store/proxy/acme:/etc/acme.sh
+    environment:
+      DEFAULT_EMAIL: 'info@example.com'
+    tty: true
+    networks:
+    - server1
+    restart: unless-stopped
+
+networks:
+  server1:
+    external: true
