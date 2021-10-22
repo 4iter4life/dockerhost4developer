@@ -30,7 +30,6 @@ CNAME | nextcloud.example.com | server1.example.com
 CNAME | vault.example.com | server1.example.com
 CNAME | gitlab.example.com | server1.example.com
 CNAME | registry.example.com | server1.example.com
-CNAME | kibana.example.com | server1.example.com
 
 # Installation
 I will use example.com in my example configurations. You need to adapt it to your FQDN (Full Qualified Domain Name).
