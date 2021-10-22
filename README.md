@@ -51,7 +51,7 @@ docker-compose -f initial.yaml up -d
 Check the result under https://portainer.example.com
 
 ## nextcloud
-Create new stack in portainer based and use following docker compose configuration
+Create new stack in portainer based on following docker compose file
 ```bash
 # Dont forget to chande domain names and passwords
 nextcloud.yaml

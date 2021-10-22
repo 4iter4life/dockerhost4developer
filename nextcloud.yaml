@@ -9,8 +9,8 @@ services:
       POSTGRES_USER: nextcloud
       POSTGRES_PASSWORD: nextcloud
       OVERWRITEPROTOCOL: https
-      VIRTUAL_HOST: nc.example.com
-      LETSENCRYPT_HOST: nc.example.com
+      VIRTUAL_HOST: nextcloud.example.com
+      LETSENCRYPT_HOST: nextcloud.example.com
     stdin_open: true
     volumes:
     - /store/nextcloud/app/data:/var/www/html/data
