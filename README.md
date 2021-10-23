@@ -1,5 +1,5 @@
 # Introduction
-Server setup prepared for single server and providing all necasserry tools for small development teams.
+Setup prepared for single server and providing of usefull tools for small development teams.
 This setup was initialy prepared for own needs and contains following tooling:
 
 - nginx-proxy + acme-companion (Reverse proxy with LetsEncrypt SSl certificate generation)
